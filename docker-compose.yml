@@ -7,13 +7,8 @@ services:
     env_file: .env
     environment:
       EMBED_BACKEND: onnx
-      # Percayai header X-Forwarded-* dari Nginx agar IP asli pengguna terbaca (rate limit login).
-      # Aman karena port hanya terbuka di 127.0.0.1 sehingga hanya Nginx di host yang bisa mengakses.
       FORWARDED_ALLOW_IPS: "*"
     ports:
-      # host:container. Hanya di localhost; akses publik lewat Nginx (https://tanya-quran.anro128.dev).
-      # Untuk uji langsung lewat http://IP:8001 tanpa Nginx, ganti menjadi "8001:8000".
       - "127.0.0.1:8001:8000"
     volumes:
-      # data/processed (database & indeks), data/models (encoder ONNX), data/app.db (akun)
       - ./data:/app/data
