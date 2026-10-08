@@ -1,0 +1,66 @@
+{"id": 1, "kategori": "tema", "query": "ayat tentang sabar menghadapi musibah", "expected": ["2:155", "2:156", "2:157"]}
+{"id": 2, "kategori": "tema", "query": "larangan riba dalam jual beli", "expected": ["2:275", "2:276", "2:278", "2:279", "3:130"]}
+{"id": 3, "kategori": "tema", "query": "kewajiban puasa bagi orang beriman", "expected": ["2:183", "2:184", "2:185"]}
+{"id": 4, "kategori": "tema", "query": "berbakti kepada kedua orang tua", "expected": ["17:23", "17:24", "31:14", "46:15", "29:8", "2:83", "4:36"]}
+{"id": 5, "kategori": "tema", "query": "larangan minum khamar dan berjudi", "expected": ["5:90", "5:91", "2:219"]}
+{"id": 6, "kategori": "tema", "query": "Allah tidak membebani seseorang melebihi kesanggupannya", "expected": ["2:286", "2:233", "6:152", "7:42", "23:62", "65:7"]}
+{"id": 7, "kategori": "tema", "query": "setiap yang bernyawa pasti akan merasakan mati", "expected": ["3:185", "21:35", "29:57"]}
+{"id": 8, "kategori": "tema", "query": "kisah pemuda yang tertidur di dalam gua", "expected": ["18:9", "18:10", "18:11", "18:13", "18:18", "18:19", "18:25"]}
+{"id": 9, "kategori": "tema", "query": "tujuan Allah menciptakan jin dan manusia", "expected": ["51:56"]}
+{"id": 10, "kategori": "tema", "query": "tidak ada paksaan dalam agama", "expected": ["2:256"]}
+{"id": 11, "kategori": "tema", "query": "golongan yang berhak menerima zakat", "expected": ["9:60"]}
+{"id": 12, "kategori": "tema", "query": "tata cara wudu sebelum salat", "expected": ["5:6"]}
+{"id": 13, "kategori": "tema", "query": "bertayamum jika tidak menemukan air", "expected": ["4:43", "5:6"]}
+{"id": 14, "kategori": "tema", "query": "kewajiban haji bagi yang mampu", "expected": ["3:97", "22:27", "2:196"]}
+{"id": 15, "kategori": "tema", "query": "larangan menggunjing dan berprasangka buruk", "expected": ["49:12"]}
+{"id": 16, "kategori": "tema", "query": "manusia diciptakan berbangsa-bangsa dan bersuku-suku agar saling mengenal", "expected": ["49:13"]}
+{"id": 17, "kategori": "tema", "query": "mendamaikan dua golongan orang mukmin yang berselisih", "expected": ["49:9", "49:10"]}
+{"id": 18, "kategori": "tema", "query": "memeriksa kebenaran berita yang dibawa orang fasik", "expected": ["49:6"]}
+{"id": 19, "kategori": "tema", "query": "perintah menutup aurat dan berjilbab bagi perempuan", "expected": ["24:31", "33:59"]}
+{"id": 20, "kategori": "tema", "query": "larangan mendekati zina", "expected": ["17:32", "24:2", "25:68"]}
+{"id": 21, "kategori": "tema", "query": "pembagian harta warisan untuk anak laki-laki dan perempuan", "expected": ["4:11", "4:12", "4:176"]}
+{"id": 22, "kategori": "tema", "query": "menikahi perempuan dua tiga atau empat dengan syarat adil", "expected": ["4:3", "4:129"]}
+{"id": 23, "kategori": "tema", "query": "perempuan yang haram dinikahi", "expected": ["4:22", "4:23", "4:24"]}
+{"id": 24, "kategori": "tema", "query": "masa idah perempuan yang dicerai atau ditinggal mati suaminya", "expected": ["2:228", "2:234", "65:1", "65:4"]}
+{"id": 25, "kategori": "tema", "query": "talak yang dapat dirujuk dua kali", "expected": ["2:229", "2:230", "2:231"]}
+{"id": 26, "kategori": "tema", "query": "perintah mencatat utang piutang", "expected": ["2:282", "2:283"]}
+{"id": 27, "kategori": "tema", "query": "Allah dekat dan mengabulkan doa orang yang berdoa", "expected": ["2:186", "40:60"]}
+{"id": 28, "kategori": "tema", "query": "sesudah kesulitan ada kemudahan", "expected": ["94:5", "94:6", "65:7"]}
+{"id": 29, "kategori": "tema", "query": "jangan berputus asa dari rahmat Allah", "expected": ["39:53", "12:87", "15:56"]}
+{"id": 30, "kategori": "kisah", "query": "Nabi Yusuf dimasukkan ke dalam sumur oleh saudara-saudaranya", "expected": ["12:10", "12:15"]}
+{"id": 31, "kategori": "kisah", "query": "Nabi Musa memukul laut dengan tongkat hingga terbelah", "expected": ["26:63", "20:77", "2:50"]}
+{"id": 32, "kategori": "kisah", "query": "Nabi Ibrahim dibakar tetapi api menjadi dingin", "expected": ["21:68", "21:69", "29:24", "37:97"]}
+{"id": 33, "kategori": "kisah", "query": "Nabi Nuh membuat kapal", "expected": ["11:37", "11:38", "23:27", "11:40"]}
+{"id": 34, "kategori": "kisah", "query": "kelahiran Nabi Isa dari Maryam", "expected": ["19:16", "19:20", "19:22", "19:23", "19:27", "3:45", "3:47"]}
+{"id": 35, "kategori": "kisah", "query": "perjalanan malam dari Masjidilharam ke Masjidilaqsa", "expected": ["17:1"]}
+{"id": 36, "kategori": "tema", "query": "malam kemuliaan lebih baik dari seribu bulan", "expected": ["97:1", "97:2", "97:3"]}
+{"id": 37, "kategori": "tema", "query": "Al-Qur'an diturunkan pada bulan Ramadan", "expected": ["2:185", "97:1", "44:3"]}
+{"id": 38, "kategori": "tema", "query": "Allah Maha Esa tidak beranak dan tidak diperanakkan", "expected": ["112:1", "112:2", "112:3", "112:4"]}
+{"id": 39, "kategori": "tema", "query": "membunuh satu jiwa seakan membunuh seluruh manusia", "expected": ["5:32"]}
+{"id": 40, "kategori": "tema", "query": "perumpamaan sedekah seperti sebutir biji yang menumbuhkan tujuh tangkai", "expected": ["2:261"]}
+{"id": 41, "kategori": "tema", "query": "jangan merusak sedekah dengan menyebut-nyebut dan menyakiti perasaan penerima", "expected": ["2:262", "2:263", "2:264"]}
+{"id": 42, "kategori": "tema", "query": "makanan yang diharamkan bangkai darah dan daging babi", "expected": ["2:173", "5:3", "6:145", "16:115"]}
+{"id": 43, "kategori": "tema", "query": "celaka bagi orang yang curang dalam takaran dan timbangan", "expected": ["83:1", "83:2", "83:3", "17:35", "55:9", "11:85"]}
+{"id": 44, "kategori": "tema", "query": "larangan memakan harta anak yatim", "expected": ["4:2", "4:10", "6:152", "17:34"]}
+{"id": 45, "kategori": "tema", "query": "sifat-sifat orang munafik", "expected": ["2:8", "2:9", "2:10", "2:14", "4:142", "4:145", "63:1", "9:67"]}
+{"id": 46, "kategori": "tema", "query": "Allah mengangkat derajat orang yang berilmu", "expected": ["58:11", "39:9", "35:28"]}
+{"id": 47, "kategori": "tema", "query": "bermusyawarah dalam urusan", "expected": ["3:159", "42:38"]}
+{"id": 48, "kategori": "tema", "query": "sangkakala ditiup pada hari kiamat", "expected": ["39:68", "69:13", "36:51", "18:99", "78:18", "6:73", "20:102"]}
+{"id": 49, "kategori": "tema", "query": "sungai dari susu madu dan khamar di surga", "expected": ["47:15"]}
+{"id": 50, "kategori": "tema", "query": "hukuman potong tangan bagi pencuri", "expected": ["5:38"]}
+{"id": 51, "kategori": "tema", "query": "Allah tidak mengampuni dosa syirik", "expected": ["4:48", "4:116"]}
+{"id": 52, "kategori": "tema", "query": "diizinkan berperang bagi yang dizalimi", "expected": ["22:39", "2:190"]}
+{"id": 53, "kategori": "informal", "query": "gimana sih caranya biar hati jadi tenang?", "expected": ["13:28"]}
+{"id": 54, "kategori": "informal", "query": "boleh gak makan makanan buatan ahli kitab", "expected": ["5:5"]}
+{"id": 55, "kategori": "informal", "query": "kalo lagi susah banget, ada ayat penyemangat ga?", "expected": ["94:5", "94:6", "2:286", "65:7", "2:155", "2:153", "12:87", "39:53"]}
+{"id": 56, "kategori": "informal", "query": "hukumnya minjem duit pake bunga itu apa", "expected": ["2:275", "2:276", "2:278", "2:279", "3:130"]}
+{"id": 57, "kategori": "informal", "query": "aku udah banyak dosa, masih bisa diampuni ga", "expected": ["39:53", "4:110", "3:135", "25:70"]}
+{"id": 58, "kategori": "informal", "query": "kenapa kita disuruh sholat", "expected": ["29:45", "20:14", "2:43", "2:45", "4:103", "2:238"]}
+{"id": 59, "kategori": "referensi", "query": "QS 2:255", "expected": ["2:255"]}
+{"id": 60, "kategori": "referensi", "query": "Al-Baqarah ayat 286", "expected": ["2:286"]}
+{"id": 61, "kategori": "referensi", "query": "apa arti ayat kursi", "expected": ["2:255"]}
+{"id": 62, "kategori": "referensi", "query": "surat yasin ayat 1", "expected": ["36:1"]}
+{"id": 63, "kategori": "referensi", "query": "an nisa 3", "expected": ["4:3"]}
+{"id": 64, "kategori": "referensi", "query": "al ikhlas 1-4", "expected": ["112:1", "112:2", "112:3", "112:4"]}
+{"id": 65, "kategori": "referensi", "query": "QS. Al-Mulk (67): 2", "expected": ["67:2"]}
+{"id": 66, "kategori": "referensi", "query": "tafsir surah ar rahman ayat 13", "expected": ["55:13"]}
