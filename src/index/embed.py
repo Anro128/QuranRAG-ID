@@ -1,23 +1,24 @@
-"""Embedding semua chunk ke LanceDB (model e5: prefix "passage: " / "query: ")."""
+"""Embedding semua chunk ke LanceDB (model e5: prefix "passage: " / "query: ").
+
+Langkah build, bukan runtime: butuh dependensi `.[index]` (sentence-transformers + torch).
+Embedding query saat aplikasi berjalan ada di src/retrieval/query_embedding.py.
+"""
 import argparse
 import sqlite3
 from functools import lru_cache
 
 import lancedb
 import pyarrow as pa
-from sentence_transformers import SentenceTransformer
 from tqdm import tqdm
 
 from src.config import DB_PATH, EMBED_MODEL, LANCE_TABLE, LANCEDB_DIR
 
 
 @lru_cache(maxsize=1)
-def get_model() -> SentenceTransformer:
+def get_model():
+    from sentence_transformers import SentenceTransformer
+
     return SentenceTransformer(EMBED_MODEL, device="cpu")
-
-
-def embed_query(text: str) -> list[float]:
-    return get_model().encode(f"query: {text}", normalize_embeddings=True).tolist()
 
 
 def main(batch_size: int, limit: int | None) -> None:

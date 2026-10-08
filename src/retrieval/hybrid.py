@@ -9,7 +9,7 @@ import lancedb
 
 from src.config import BM25_DIR, DB_PATH, LANCE_TABLE, LANCEDB_DIR
 from src.index.bm25_index import IDS_FILE, tokenize
-from src.index.embed import embed_query
+from src.retrieval.query_embedding import embed_query
 
 RRF_K = 60
 
