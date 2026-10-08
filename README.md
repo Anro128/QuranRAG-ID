@@ -135,7 +135,7 @@ Pasang Docker Engine + Compose plugin, lalu ambil kode:
 ```bash
 git clone https://github.com/Anro128/QuranRAG-ID.git
 cd QuranRAG-ID
-cp .env.example .env               # isi DEEPSEEK_API_KEY
+cp .env.example .env               # isi DEEPSEEK_API_KEY dan COOKIE_SECURE=true
 ```
 
 ### 2. Kirim data dari mesin build
@@ -155,7 +155,41 @@ docker compose up -d --build
 docker compose exec app python -m src.auth create-user <username>
 ```
 
-Aplikasi berjalan di **http://IP_VPS:8001** (port bisa diubah di `docker-compose.yml`).
+Container hanya mendengarkan di `127.0.0.1:8001`; akses publik lewat Nginx (langkah 4).
+Cek dari VPS: `curl http://127.0.0.1:8001/api/health`.
+
+### 4. Domain dan HTTPS (Nginx)
+
+Contoh untuk **https://tanya-quran.anro128.dev**. Domain `.dev` wajib HTTPS (browser memaksanya),
+jadi langkah sertifikat tidak boleh dilewati.
+
+1. **DNS** (di name.com: *My Domains → anro128.dev → Manage DNS Records*), tambahkan:
+
+   | Type | Host | Answer | TTL |
+   |---|---|---|---|
+   | A | `tanya-quran` | IP publik VPS | 300 |
+
+   Cek dengan `dig +short tanya-quran.anro128.dev` (harus menampilkan IP VPS) sebelum lanjut.
+
+2. **Firewall Azure**: pastikan inbound port **80** dan **443** terbuka (*VM → Networking*).
+   Port 8001 tidak perlu dibuka; hapus aturannya bila pernah dibuat.
+
+3. **Nginx**: pasang konfigurasi yang sudah disediakan di repo, lalu ambil sertifikat:
+
+   ```bash
+   sudo cp deploy/nginx/tanya-quran.anro128.dev.conf /etc/nginx/sites-available/
+   sudo ln -s /etc/nginx/sites-available/tanya-quran.anro128.dev.conf /etc/nginx/sites-enabled/
+   sudo nginx -t && sudo systemctl reload nginx
+   sudo certbot --nginx -d tanya-quran.anro128.dev     # sudo apt install certbot python3-certbot-nginx bila belum ada
+   ```
+
+   certbot menambahkan blok HTTPS dan redirect HTTP → HTTPS ke file tersebut, serta memperbarui
+   sertifikat secara otomatis.
+
+4. **Cookie aman**: pastikan `.env` berisi `COOKIE_SECURE=true`, lalu `docker compose up -d`.
+
+Buka **https://tanya-quran.anro128.dev** dan login. Untuk subdomain lain, ganti nama domain di file
+konfigurasi Nginx dan di perintah certbot.
 
 ### Perintah sehari-hari
 
@@ -170,12 +204,13 @@ Aplikasi berjalan di **http://IP_VPS:8001** (port bisa diubah di `docker-compose
 
 ### Catatan
 
-- **Akses lewat HTTP biasa** (`http://IP:8001`): biarkan `COOKIE_SECURE=false`, karena kalau `true` login tidak
-  akan tersimpan. Buka port 8001 di firewall penyedia VPS (di Azure: *Networking → inbound port rule*).
-  Port yang dipublikasikan Docker **tidak** tunduk pada aturan `ufw`.
-- **Produksi**: pasang reverse proxy HTTPS (Nginx/Caddy) yang meneruskan ke `127.0.0.1:8001`, ubah port di
-  `docker-compose.yml` menjadi `"127.0.0.1:8001:8000"` agar tidak bisa diakses langsung, lalu set
-  `COOKIE_SECURE=true`. Di Nginx, tambahkan `proxy_buffering off;` agar jawaban tetap mengalir (streaming).
+- **Konfigurasi Nginx** ([deploy/nginx/](deploy/nginx/)) sudah mematikan buffering untuk `/api/chat` agar
+  jawaban mengalir bertahap, dan menimpa `X-Forwarded-For` dengan IP asli agar pembatasan login per IP
+  tidak bisa diakali. Container mempercayai header ini (`FORWARDED_ALLOW_IPS` di `docker-compose.yml`)
+  karena port-nya hanya terbuka di localhost.
+- **Uji tanpa domain** (`http://IP:8001`): ubah port di `docker-compose.yml` menjadi `"8001:8000"`, set
+  `COOKIE_SECURE=false` (kalau `true`, login tidak tersimpan lewat HTTP), dan buka port 8001 di firewall Azure.
+  Port yang dipublikasikan Docker **tidak** tunduk pada aturan `ufw`. Kembalikan setelah selesai menguji.
 - **Memori**: container memakai ±650 MiB (puncak ±830 MB, terukur dengan 1 vCPU). Di VPS 1 GB aktifkan
   swap 1–2 GB, karena sistem operasi dan Docker sendiri juga butuh ±250 MB.
 - **Satu worker**: image menjalankan satu proses uvicorn. Jangan menambah `--workers`, karena tiap worker
@@ -229,7 +264,8 @@ src/resources/    sinonim.json, alias_surah.json, stopwords_id.txt
 src/api.py        backend FastAPI (SSE)
 src/auth.py       login, sesi, CLI kelola akun
 Dockerfile        image runtime (frontend + backend, tanpa torch)
-docker-compose.yml  layanan di port 8001, volume data/
+docker-compose.yml  layanan di 127.0.0.1:8001, volume data/
+deploy/nginx/     konfigurasi Nginx untuk subdomain (HTTPS via certbot)
 eval/             golden_set.jsonl, run_eval.py
 web/              frontend React + Vite + TypeScript
 search.py         CLI uji pencarian
