@@ -9,7 +9,10 @@ export interface ChatRequest {
 export type ChatEvent =
   | { event: "retrieval"; data: { route: string; refs: string[]; surah_filter: number | null; ayat: Ayat[] } }
   | { event: "delta"; data: { text: string } }
-  | { event: "final"; data: { text: string; cited: [number, number][]; invalid: string[]; ai: boolean } }
+  | {
+      event: "final";
+      data: { text: string; cited: [number, number][]; invalid: string[]; ai: boolean; off_topic?: boolean };
+    }
   | { event: "error"; data: { message: string; status?: number | null } };
 
 /** Dilempar bila sesi tidak valid/kedaluwarsa (HTTP 401) agar UI kembali ke halaman login. */

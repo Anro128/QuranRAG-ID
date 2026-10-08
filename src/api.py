@@ -155,7 +155,8 @@ def chat(req: ChatRequest, _: CurrentUser) -> StreamingResponse:
             return
 
         v = turn.finalize()
-        yield sse("final", {"text": v.text, "cited": v.cited, "invalid": v.invalid, "ai": True})
+        yield sse("final", {"text": v.text, "cited": v.cited, "invalid": v.invalid, "ai": True,
+                            "off_topic": turn.off_topic})
 
     return StreamingResponse(events(), media_type="text/event-stream",
                              headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})

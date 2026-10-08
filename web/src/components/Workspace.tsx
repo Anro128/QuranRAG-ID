@@ -71,11 +71,13 @@ export function Workspace({ username, onLogout, onSessionExpired }: Props) {
               patch(assistantId, (m) => ({ content: m.content + e.data.text }));
               break;
             case "final":
-              patch(assistantId, () => ({
+              patch(assistantId, (m) => ({
                 content: e.data.text,
                 cited: e.data.cited,
                 invalid: e.data.invalid,
                 ai: e.data.ai,
+                // pertanyaan di luar Al-Qur'an: jangan tampilkan ayat hasil pencarian yang tidak relevan
+                ayat: e.data.off_topic ? [] : m.ayat,
                 status: "done",
               }));
               break;

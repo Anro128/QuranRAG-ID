@@ -80,7 +80,8 @@ export function AssistantBubble({ message: m, showTafsir }: Props) {
         </section>
       )}
 
-      {terkait.length > 0 && m.status !== "searching" && (
+      {/* tunggu jawaban selesai: AI bisa menilai pertanyaan di luar topik, dan ayatnya lalu dikosongkan */}
+      {terkait.length > 0 && (m.status === "done" || m.status === "error") && (
         <section className="cards">
           <h3>{dikutip.length > 0 ? "Ayat terkait lainnya" : `Ayat yang ditemukan (${terkait.length})`}</h3>
           {terkait.map((a) => (

@@ -4,6 +4,9 @@ from src.retrieval.store import Ayat
 
 MAX_TAFSIR_CHARS = 1800  # per potongan tafsir di konteks
 
+# Penanda jawaban di luar topik; dibuang oleh rag.Turn.stream sebelum sampai ke pengguna.
+OFF_TOPIC_MARKER = "[[DI_LUAR_TOPIK]]"
+
 SYSTEM_PROMPT = """Anda adalah asisten tanya-jawab Al-Qur'an berbahasa Indonesia.
 Sumber Anda HANYA kutipan terjemahan dan Tafsir Kemenag RI di bagian SUMBER pada pesan pengguna.
 
@@ -15,8 +18,8 @@ Aturan wajib:
 5. Bedakan dengan jelas antara bunyi terjemahan ayat dan penjelasan tafsir (sebut "menurut Tafsir Kemenag").
 6. Anda bukan mufti. Untuk pertanyaan hukum/fikih yang rinci atau kasus pribadi, sampaikan apa yang dikatakan sumber lalu sarankan bertanya kepada ulama atau lembaga fatwa yang kompeten.
 7. Untuk topik sensitif (kekerasan, perang, takfir, hubungan antaragama), sertakan konteks ayat dan tafsirnya, jangan memotong ayat dari konteksnya.
-8. Jika pertanyaan tidak berkaitan dengan Al-Qur'an atau Islam, tolak dengan sopan dan jelaskan bahwa Anda hanya menjawab seputar Al-Qur'an.
-9. Gunakan bahasa Indonesia yang jelas dan ringkas. Gunakan poin-poin bila membantu."""
+8. Jika pertanyaan TIDAK berkaitan dengan Al-Qur'an atau Islam (misalnya pemrograman, matematika, berita, atau obrolan umum), awali jawaban PERSIS dengan penanda __OFF_TOPIC_MARKER__ lalu tolak dengan sopan dalam 1-2 kalimat: jelaskan bahwa Anda hanya menjawab seputar Al-Qur'an. Jangan menyebut, mengutip, atau mengaitkan ayat apa pun, walaupun SUMBER berisi ayat. Pertanyaan tentang Islam yang jawabannya tidak ada di SUMBER BUKAN di luar topik; untuk itu gunakan aturan 3.
+9. Gunakan bahasa Indonesia yang jelas dan ringkas. Gunakan poin-poin bila membantu.""".replace("__OFF_TOPIC_MARKER__", OFF_TOPIC_MARKER)
 
 
 def build_context(ayat_list: list[Ayat], hits: list[Hit]) -> str:

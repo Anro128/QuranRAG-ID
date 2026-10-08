@@ -28,7 +28,9 @@ def complete(prompt: str, max_tokens: int = 512, temperature: float = 0.0) -> st
     return resp.choices[0].message.content or ""
 
 
-def stream_chat(messages: list[dict], max_tokens: int = 1500, temperature: float = 0.2) -> Iterator[str]:
+# Model DeepSeek yang "berpikir" dulu (reasoning) menghitung token berpikir ke max_tokens. Jawaban normal
+# terukur ±1.100–1.300 token termasuk ±100–350 token berpikir, jadi beri ruang lega agar tidak terpotong.
+def stream_chat(messages: list[dict], max_tokens: int = 4096, temperature: float = 0.2) -> Iterator[str]:
     stream = client().chat.completions.create(
         model=DEEPSEEK_MODEL,
         messages=messages,
