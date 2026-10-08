@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { getHealth, streamChat, UnauthorizedError } from "../api";
 import type { AssistantMessage, Health, Message } from "../types";
 import { AssistantBubble } from "./AssistantBubble";
+import { Logo, MenuIcon, PlusIcon, SendIcon, StopIcon } from "./Icons";
 import { Sidebar } from "./Sidebar";
 
 let counter = 0;
@@ -135,12 +136,12 @@ export function Workspace({ username, onLogout, onSessionExpired }: Props) {
       <div className="main">
         <header className="main-head">
           <button type="button" className="icon-btn only-mobile" onClick={() => setSidebarOpen(true)} aria-label="Buka menu">
-            ☰
+            <MenuIcon />
           </button>
           <span className="chat-title">{firstQuestion ?? "Chat baru"}</span>
           {messages.length > 0 && (
             <button type="button" className="icon-btn only-mobile" onClick={newChat} aria-label="Chat baru">
-              ＋
+              <PlusIcon />
             </button>
           )}
         </header>
@@ -156,7 +157,7 @@ export function Workspace({ username, onLogout, onSessionExpired }: Props) {
 
             {messages.length === 0 ? (
               <div className="empty">
-                <span className="empty-logo">📖</span>
+                <Logo size={56} className="empty-logo" />
                 <h2>Assalamu'alaikum, {username}</h2>
                 <p>Tanyakan tema, kisah, atau sebut ayat tertentu. Setiap jawaban menyertakan ayat sumbernya.</p>
               </div>
@@ -200,12 +201,12 @@ export function Workspace({ username, onLogout, onSessionExpired }: Props) {
               }}
             />
             {busy ? (
-              <button type="button" className="primary" onClick={() => abortRef.current?.abort()}>
-                Stop
+              <button type="button" className="primary with-icon" onClick={() => abortRef.current?.abort()}>
+                <StopIcon size={18} /> Stop
               </button>
             ) : (
-              <button type="submit" className="primary" disabled={!input.trim()}>
-                Kirim
+              <button type="submit" className="primary with-icon" disabled={!input.trim()}>
+                Kirim <SendIcon size={18} />
               </button>
             )}
           </form>

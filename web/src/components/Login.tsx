@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { login } from "../api";
+import { Logo } from "./Icons";
 
 interface Props {
   onLogin: (username: string) => void;
@@ -29,7 +30,7 @@ export function Login({ onLogin }: Props) {
     <div className="login-page">
       <form className="login-card" onSubmit={submit}>
         <div className="login-brand">
-          <span className="logo">📖</span>
+          <Logo size={52} />
           <h1>QuranRAG-ID</h1>
           <p>Tanya-jawab Al-Qur'an berbahasa Indonesia</p>
         </div>

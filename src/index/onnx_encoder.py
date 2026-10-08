@@ -15,6 +15,20 @@ import onnxruntime as ort
 import sentencepiece as spm
 
 MAX_TOKENS = 512
+MAX_THREADS = 4  # query pendek: thread tambahan tidak mempercepat, hanya menambah memori
+
+
+def default_threads() -> int:
+    """Jumlah core yang boleh dipakai proses ini (menghormati cpuset Docker), maksimal MAX_THREADS.
+
+    Mode otomatis ONNX Runtime menghitung semua core fisik host, sehingga di container yang
+    dibatasi ia membuat thread berlebih dan gagal mengatur affinity.
+    """
+    try:
+        n = len(os.sched_getaffinity(0))
+    except AttributeError:  # Windows/macOS
+        n = os.cpu_count() or 1
+    return max(1, min(n, MAX_THREADS))
 # Pemetaan fairseq XLM-R: <s>=0, <pad>=1, </s>=2, <unk>=3; ID sentencepiece digeser +1, unk sentencepiece (0) -> 3.
 BOS, EOS, UNK, FAIRSEQ_OFFSET = 0, 2, 3, 1
 
@@ -24,7 +38,8 @@ class OnnxEncoder:
         self.sp = spm.SentencePieceProcessor(model_file=str(model_dir / "sentencepiece.bpe.model"))
 
         opts = ort.SessionOptions()
-        opts.intra_op_num_threads = int(os.getenv("ORT_THREADS", "0"))  # 0 = otomatis
+        opts.intra_op_num_threads = int(os.getenv("ORT_THREADS", "0")) or default_threads()  # 0 = otomatis
+        opts.inter_op_num_threads = 1
         opts.graph_optimization_level = ort.GraphOptimizationLevel.ORT_ENABLE_ALL
         # hemat RAM: matikan arena memori agar buffer aktivasi dilepas setelah tiap query
         opts.enable_cpu_mem_arena = False

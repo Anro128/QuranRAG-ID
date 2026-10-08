@@ -58,7 +58,8 @@ button { font: inherit; cursor: pointer; color: inherit; }
 button:disabled { cursor: not-allowed; opacity: .5; }
 a { color: var(--accent); }
 
-.logo { font-size: 24px; line-height: 1; }
+.with-icon { display: inline-flex; align-items: center; gap: 6px; }
+.with-icon svg { flex-shrink: 0; }
 
 .primary {
   background: var(--accent);
@@ -91,7 +92,8 @@ a { color: var(--accent); }
 .icon-btn:hover { background: var(--hover); }
 .only-mobile { display: none; }
 
-.splash { height: 100%; display: grid; place-items: center; font-size: 40px; opacity: .6; }
+.splash { height: 100%; display: grid; place-items: center; }
+.splash svg { animation: pulse 1.4s ease-in-out infinite; }
 .toast {
   position: fixed;
   top: 16px;
@@ -119,7 +121,6 @@ a { color: var(--accent); }
   gap: 14px;
 }
 .login-brand { text-align: center; margin-bottom: 6px; }
-.login-brand .logo { font-size: 38px; }
 .login-brand h1 { margin: 6px 0 2px; font-size: 20px; }
 .login-brand p { margin: 0; color: var(--muted); font-size: 13.5px; }
 .login-card label { display: flex; flex-direction: column; gap: 5px; font-size: 13px; font-weight: 500; }
@@ -162,7 +163,7 @@ a { color: var(--accent); }
   text-align: left;
 }
 .new-chat:hover { border-color: var(--accent); }
-.new-chat span { color: var(--accent); font-size: 16px; }
+.new-chat svg { color: var(--accent); }
 
 .sidebar-scroll { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 18px; padding: 4px 2px; }
 .sidebar-scroll h4 {
@@ -243,7 +244,7 @@ a { color: var(--accent); }
 .banner.error { background: var(--error-bg); color: var(--error-text); }
 
 .empty { text-align: center; padding: 18vh 0 40px; }
-.empty-logo { font-size: 44px; }
+.empty-logo { display: block; margin: 0 auto; }
 .empty h2 { margin: 8px 0 6px; font-weight: 600; }
 .empty p { color: var(--muted); margin: 0 auto; max-width: 460px; }
 
@@ -305,6 +306,8 @@ a { color: var(--accent); }
 @keyframes pulse { 50% { opacity: .45; } }
 
 .error, .warn { font-size: 13.5px; border-radius: 8px; padding: 8px 12px; margin: 12px 0 0; }
+.error.with-icon { display: flex; align-items: flex-start; }
+.error.with-icon svg { margin-top: 3px; }
 .error { background: var(--error-bg); color: var(--error-text); }
 .warn { background: var(--warn-bg); color: var(--warn-text); }
 .disclaimer { margin: 14px 0 0; font-size: 12px; color: var(--muted); }
@@ -336,8 +339,18 @@ a { color: var(--accent); }
   font-size: 13.5px;
 }
 .ayat-card > summary::-webkit-details-marker { display: none; }
-.ayat-card > summary::after { content: "▸"; margin-left: auto; color: var(--muted); transition: transform .15s; }
-.ayat-card[open] > summary::after { transform: rotate(90deg); }
+.ayat-card > summary::after {
+  content: "";
+  margin-left: auto;
+  width: 7px;
+  height: 7px;
+  flex-shrink: 0;
+  border-right: 1.8px solid var(--muted);
+  border-bottom: 1.8px solid var(--muted);
+  transform: rotate(-45deg);
+  transition: transform .15s;
+}
+.ayat-card[open] > summary::after { transform: rotate(45deg); }
 .ayat-ref { font-weight: 600; color: var(--accent); white-space: nowrap; }
 .ayat-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ayat-juz { color: var(--muted); font-size: 12px; white-space: nowrap; }

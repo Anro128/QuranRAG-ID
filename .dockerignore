@@ -1,0 +1,19 @@
+# data & rahasia di-mount saat runtime, jangan masuk image
+data/
+.env
+*.db
+*.tar.gz
+
+# hasil build & dependensi lokal (dibangun ulang di dalam image)
+.venv/
+web/node_modules/
+web/dist/
+**/__pycache__/
+*.egg-info/
+*.tsbuildinfo
+
+# lain-lain
+.git/
+eval/
+PLAN.md
+search.py

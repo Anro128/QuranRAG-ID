@@ -1,0 +1,15 @@
+services:
+  app:
+    build: .
+    image: quranrag-id:latest
+    container_name: quranrag-id
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      EMBED_BACKEND: onnx
+    ports:
+      # host:container. Aplikasi bisa dibuka di http://<host>:8001
+      - "8001:8000"
+    volumes:
+      # data/processed (database & indeks), data/models (encoder ONNX), data/app.db (akun)
+      - ./data:/app/data

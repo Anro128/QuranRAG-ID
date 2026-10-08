@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getMe, logout } from "./api";
+import { Logo } from "./components/Icons";
 import { Login } from "./components/Login";
 import { Workspace } from "./components/Workspace";
 
@@ -14,7 +15,13 @@ export default function App() {
       .catch(() => setAuth({ status: "anon", notice: "Backend tidak dapat dihubungi." }));
   }, []);
 
-  if (auth.status === "loading") return <div className="splash">📖</div>;
+  if (auth.status === "loading") {
+    return (
+      <div className="splash">
+        <Logo size={56} />
+      </div>
+    );
+  }
 
   if (auth.status === "anon") {
     return (

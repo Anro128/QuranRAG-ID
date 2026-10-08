@@ -2,6 +2,7 @@ import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import type { AssistantMessage } from "../types";
 import { AyatCard, ayatDomId } from "./AyatCard";
+import { AlertIcon } from "./Icons";
 
 const CITATION = /\[QS\s*(\d{1,3}):(\d{1,3})(?:-(\d{1,3}))?\]/g;
 
@@ -59,7 +60,11 @@ export function AssistantBubble({ message: m, showTafsir }: Props) {
         </div>
       )}
 
-      {m.error && <p className="error">⚠️ {m.error}. Ayat yang ditemukan tetap ditampilkan di bawah.</p>}
+      {m.error && (
+        <p className="error with-icon">
+          <AlertIcon size={16} /> {m.error}. Ayat yang ditemukan tetap ditampilkan di bawah.
+        </p>
+      )}
       {m.invalid.length > 0 && (
         <p className="warn">
           {m.invalid.length} sitasi dihapus karena tidak ada di sumber yang ditemukan (ditandai “sitasi tidak terverifikasi”).

@@ -18,10 +18,9 @@ database, tidak pernah dibuat oleh AI.
 
 | | Untuk membangun data & indeks | Untuk menjalankan server |
 |---|---|---|
-| Python | 3.11+ | 3.11+ |
-| Node.js | 20+ (build frontend) | tidak perlu (cukup `web/dist`) |
-| RAM | ±8 GB | 1 GB cukup (server ±500 MB, puncak ±650 MB) |
-| Disk | ±5 GB (torch, model, data) | ±1 GB |
+| Perangkat lunak | Python 3.11+, Node.js 20+ | Docker + Compose (atau Python 3.11+ tanpa Docker) |
+| RAM | ±8 GB | 1 GB + swap 1–2 GB (aplikasi ±650 MiB, puncak ±830 MB) |
+| Disk | ±5 GB (torch, model, data) | ±1,5 GB (image ±1 GB + data ±350 MB) |
 | Lainnya | koneksi internet untuk unduh dataset & model | API key [DeepSeek](https://platform.deepseek.com) (opsional) |
 
 Data dan indeks cukup dibangun **sekali** di laptop/PC, lalu hasilnya dipakai oleh server.
@@ -123,36 +122,73 @@ python -m eval.run_eval --detail              # evaluasi pencarian atas golden s
 python -m eval.run_eval --configs hybrid+sin --llm   # idem, dengan ekspansi kata kunci via DeepSeek
 ```
 
-## Deploy ke VPS
+## Deploy ke VPS (Docker)
 
-Server tidak memerlukan torch: VPS 1 GB RAM sudah cukup.
+Image Docker sudah berisi backend **dan** frontend (di-build di dalam image), tanpa torch.
+Yang tidak masuk image adalah folder `data/` (database, indeks, model ONNX, akun); folder ini
+di-mount sebagai volume.
 
-1. **Salin ke server**: kode repo, `data/processed/`, `data/models/`, dan `web/dist/`.
-   `data/raw/` tidak diperlukan.
-2. **Pasang dan konfigurasi**:
+### 1. Siapkan VPS
 
-   ```bash
-   python3 -m venv .venv && source .venv/bin/activate
-   pip install -e .                 # hanya dependensi runtime (±520 MB)
-   cp .env.example .env             # isi DEEPSEEK_API_KEY, EMBED_BACKEND=onnx, COOKIE_SECURE=true
-   python -m src.auth create-user <username>
-   ```
+Pasang Docker Engine + Compose plugin, lalu ambil kode:
 
-3. **Jalankan** di belakang reverse proxy HTTPS (Nginx/Caddy):
+```bash
+git clone https://github.com/Anro128/QuranRAG-ID.git
+cd QuranRAG-ID
+cp .env.example .env               # isi DEEPSEEK_API_KEY
+```
 
-   ```bash
-   uvicorn src.api:app --host 127.0.0.1 --port 8000
-   ```
+### 2. Kirim data dari mesin build
 
-Catatan untuk VPS kecil:
+`data/` tidak ada di git. Dari mesin build (mis. WSL), kirim hasil langkah [Bangun data dan indeks](#4-bangun-data-dan-indeks):
 
-- Jalankan **satu worker** (satu proses), yaitu perintah `uvicorn` di atas apa adanya. Jangan menambah
-  `--workers N` atau memakai `gunicorn -w N`: tiap worker memuat model dan indeks sendiri (±500 MB per proses).
-  Satu worker tetap bisa melayani banyak pengguna bersamaan karena tiap request berjalan di thread terpisah
-  dan sebagian besar waktunya menunggu respons DeepSeek.
-- Aktifkan swap ±1 GB sebagai pengaman puncak memori saat start.
-- Bila VPS hanya 1 vCPU, set `ORT_THREADS=1`.
-- Di Nginx, tambahkan `proxy_buffering off;` untuk `/api/chat` agar jawaban tetap mengalir (streaming).
+```bash
+rsync -avzR --progress --exclude 'api.log' data/processed data/models <host-vps>:~/QuranRAG-ID/
+```
+
+Ganti `<host-vps>` dengan alias SSH atau `user@ip`, dan sesuaikan path tujuannya dengan lokasi clone di VPS.
+
+### 3. Build dan jalankan
+
+```bash
+docker compose up -d --build
+docker compose exec app python -m src.auth create-user <username>
+```
+
+Aplikasi berjalan di **http://IP_VPS:8001** (port bisa diubah di `docker-compose.yml`).
+
+### Perintah sehari-hari
+
+| Perintah | Fungsi |
+|---|---|
+| `docker compose logs -f app` | lihat log |
+| `docker compose ps` | status & health container |
+| `docker compose restart app` | restart (mis. setelah mengubah `.env`) |
+| `git pull && docker compose up -d --build` | update ke kode terbaru |
+| `docker compose exec app python -m src.auth <perintah>` | kelola akun (lihat [Kelola akun](#kelola-akun)) |
+| `docker compose down` | hentikan |
+
+### Catatan
+
+- **Akses lewat HTTP biasa** (`http://IP:8001`): biarkan `COOKIE_SECURE=false`, karena kalau `true` login tidak
+  akan tersimpan. Buka port 8001 di firewall penyedia VPS (di Azure: *Networking → inbound port rule*).
+  Port yang dipublikasikan Docker **tidak** tunduk pada aturan `ufw`.
+- **Produksi**: pasang reverse proxy HTTPS (Nginx/Caddy) yang meneruskan ke `127.0.0.1:8001`, ubah port di
+  `docker-compose.yml` menjadi `"127.0.0.1:8001:8000"` agar tidak bisa diakses langsung, lalu set
+  `COOKIE_SECURE=true`. Di Nginx, tambahkan `proxy_buffering off;` agar jawaban tetap mengalir (streaming).
+- **Memori**: container memakai ±650 MiB (puncak ±830 MB, terukur dengan 1 vCPU). Di VPS 1 GB aktifkan
+  swap 1–2 GB, karena sistem operasi dan Docker sendiri juga butuh ±250 MB.
+- **Satu worker**: image menjalankan satu proses uvicorn. Jangan menambah `--workers`, karena tiap worker
+  memuat model dan indeks sendiri. Satu worker tetap melayani banyak pengguna bersamaan karena tiap request
+  berjalan di thread terpisah dan sebagian besar waktunya menunggu respons DeepSeek.
+- **Izin tulis**: container berjalan sebagai UID 1000 dan menulis `data/app.db`. Bila user VPS Anda bukan
+  UID 1000, jalankan `sudo chown -R 1000:1000 data`.
+
+### Tanpa Docker
+
+Bisa juga langsung dengan Python di VPS: salin juga `web/dist/`, lalu `pip install -e .` (hanya dependensi
+runtime) dan `uvicorn src.api:app --host 127.0.0.1 --port 8000`, dengan catatan yang sama soal satu worker,
+swap, dan reverse proxy.
 
 ## Konfigurasi
 
@@ -165,7 +201,7 @@ Semua diatur lewat file `.env`:
 | `DEEPSEEK_MODEL` | `deepseek-chat` | nama model DeepSeek |
 | `EMBED_MODEL` | `intfloat/multilingual-e5-base` | model embedding (harus sama dengan saat indeks dibangun) |
 | `EMBED_BACKEND` | `auto` | `auto` (ONNX bila tersedia), `onnx`, atau `torch` |
-| `ORT_THREADS` | `0` | jumlah thread ONNX Runtime; `0` = otomatis |
+| `ORT_THREADS` | `0` | jumlah thread ONNX Runtime; `0` = otomatis (core yang tersedia untuk proses, maks. 4) |
 | `COOKIE_SECURE` | `false` | `true` bila aplikasi disajikan lewat HTTPS |
 
 ## API
@@ -192,6 +228,8 @@ src/generation/   klien DeepSeek, prompt, validator sitasi, pipeline RAG
 src/resources/    sinonim.json, alias_surah.json, stopwords_id.txt
 src/api.py        backend FastAPI (SSE)
 src/auth.py       login, sesi, CLI kelola akun
+Dockerfile        image runtime (frontend + backend, tanpa torch)
+docker-compose.yml  layanan di port 8001, volume data/
 eval/             golden_set.jsonl, run_eval.py
 web/              frontend React + Vite + TypeScript
 search.py         CLI uji pencarian

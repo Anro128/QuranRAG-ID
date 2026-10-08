@@ -1,3 +1,5 @@
+import { CloseIcon, Logo, LogoutIcon, PlusIcon } from "./Icons";
+
 const EXAMPLES = [
   "Ayat tentang sabar menghadapi musibah",
   "Apa isi ayat kursi?",
@@ -27,15 +29,15 @@ export function Sidebar(p: Props) {
       <div className={`scrim ${p.open ? "show" : ""}`} onClick={p.onClose} />
       <aside className={`sidebar ${p.open ? "open" : ""}`}>
         <div className="sidebar-head">
-          <span className="logo">📖</span>
+          <Logo size={28} />
           <span className="sidebar-title">QuranRAG-ID</span>
           <button type="button" className="icon-btn only-mobile" onClick={p.onClose} aria-label="Tutup menu">
-            ✕
+            <CloseIcon />
           </button>
         </div>
 
         <button type="button" className="new-chat" onClick={p.onNewChat}>
-          <span>＋</span> Chat baru
+          <PlusIcon size={18} /> Chat baru
         </button>
 
         <nav className="sidebar-scroll">
@@ -89,8 +91,8 @@ export function Sidebar(p: Props) {
           <span className="user-name" title={p.username}>
             {p.username}
           </span>
-          <button type="button" className="ghost" onClick={p.onLogout}>
-            Keluar
+          <button type="button" className="ghost with-icon" onClick={p.onLogout}>
+            <LogoutIcon size={15} /> Keluar
           </button>
         </div>
       </aside>
